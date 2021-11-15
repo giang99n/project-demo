@@ -18,7 +18,6 @@ class RestClient {
   }
 
   final Dio _dio;
-
   // Get:-----------------------------------------------------------------------
   Future<Response> get(
     String uri, {

@@ -1,21 +1,23 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:projectbnk/blocs/login/login_bloc.dart';
 import 'package:projectbnk/configs/colors.dart';
 import 'package:projectbnk/network/apis.dart';
+import 'package:projectbnk/ui/home/home_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context)=> LoginBloc(LoginInitState(), Api()))
+        BlocProvider(create: (context) => LoginBloc(LoginInitState(), Api()))
       ],
-      child:  const BodyLogin(),
+      child: const BodyLogin(),
     );
   }
 }
@@ -30,30 +32,29 @@ class BodyLogin extends StatefulWidget {
 class _BodyLoginState extends State<BodyLogin> {
   int currentPos = 0;
   final List<String> imageList = [
-    "https://www.setaswall.com/wp-content/uploads/2018/08/Spiderman-Wallpaper-76-1280x720.jpg",
-    "https://lh3.googleusercontent.com/proxy/yL2FmQfZA79S5eIDza9MH2NjKGIKWPOGRHxHdYwiNPcYDW26YmK6qnP01ZDLsBENZpiADc1ohkj3LzVjrwoX8Pb-crT6MYZb3Jp9gy3ZrlET_yvoFS0qtUHLq4DtVPcqIdxPiNWI_j08omBVACv-YJc",
-    "https://images.hdqwalls.com/download/spiderman-peter-parker-standing-on-a-rooftop-ix-1280x720.jpg",
-    "https://images.wallpapersden.com/image/download/peter-parker-spider-man-homecoming_bGhsa22UmZqaraWkpJRmZ21lrWxnZQ.jpg",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvUgui-suS8DgaljlONNuhy4vPUsC_UKvxJQ&usqp=CAU",
+    "assets/images/introduce1.jpg",
+    "assets/images/introduce2.png",
+    "assets/images/introduce3.jpg",
   ];
 
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  late bool _obscureText ;
+  late bool _obscureText;
 
   LoginBloc? loginBloc;
   Api? api;
 
   @override
   void initState() {
-    _obscureText = false;
-  }
-  @override
-  void setState(VoidCallback fn) {
     loginBloc = BlocProvider.of<LoginBloc>(context);
     email.text = 'dog1@gmail.com';
     password.text = '123456';
+    _obscureText = false;
+  }
+
+  @override
+  void setState(VoidCallback fn) {
     super.setState(fn);
   }
 
@@ -66,182 +67,334 @@ class _BodyLoginState extends State<BodyLogin> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final msg = BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+      if (state is LoginLoadingState) {
+        return const CircularProgressIndicator();
+      } else if (state is LoginErrorState) {
+        return Text(state.message);
+      } else {
+        return Container();
+      }
+    });
+
     return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-        color: Colors.white,
-        constraints: const BoxConstraints.expand(),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formkey,
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 80,
-                ),
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CarouselSlider(
-                        options: CarouselOptions(
-                          enlargeCenterPage: true,
-                          enableInfiniteScroll: false,
-                          autoPlay: true,
-                            onPageChanged: (index, reason) {
-                              setState(() {
-                                currentPos = index;
-                              });
-                            }
-                        ),
-                        items: imageList.map((e) => ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Stack(
-                            fit: StackFit.expand,
-                            children: <Widget>[
-                              Image.network(e,
-                                width: size.width*0.8,
-                                height: size.height*0.38,
-                                fit: BoxFit.cover,)
-                            ],
-                          ) ,
-                        )).toList(),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: imageList.map((url) {
-                          int index = imageList.indexOf(url);
-                          return Container(
-                            width: 8.0,
-                            height: 8.0,
-                            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: currentPos == index
-                                  ? Color.fromRGBO(0, 0, 0, 0.9)
-                                  : Color.fromRGBO(0, 0, 0, 0.4),
+      body: BlocListener<LoginBloc, LoginState>(
+        listener: (context, state) {
+          if (state is LoginSuccessState) {
+            print("login ok");
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+            );
+          }
+        },
+        child:  Container(
+          padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+          color: Colors.white,
+          constraints: const BoxConstraints.expand(),
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formkey,
+              child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(0, 60, 0, 30),
+                    child: Text("Welcome back !",
+                        style: TextStyle(fontSize: 22, color: Color(0xff333333))),
+                  ),
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CarouselSlider(
+                          options: CarouselOptions(
+                              enlargeCenterPage: true,
+                              pauseAutoPlayOnTouch: true,
+                              enableInfiniteScroll: false,
+                              autoPlay: true,
+                              onPageChanged: (index, reason) {
+                                setState(() {
+                                  currentPos = index;
+                                });
+                              }),
+                          items: imageList
+                              .map((e) => ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Stack(
+                              fit: StackFit.expand,
+                              children: <Widget>[
+                                Image.asset(
+                                  e,
+                                  width: size.width * 0.8,
+                                  height: size.height * 0.4,
+                                  fit: BoxFit.cover,
+                                )
+                              ],
                             ),
-                          );
-                        }).toList(),
+                          ))
+                              .toList(),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: imageList.map((url) {
+                            int index = imageList.indexOf(url);
+                            return Container(
+                              width: 9.0,
+                              height: 9.0,
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 12.0, horizontal: 5.0),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: currentPos == index
+                                    ? const Color.fromRGBO(0, 0, 0, 0.9)
+                                    : const Color.fromRGBO(163, 161, 161, 0.4),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: size.height*0.08,
+                  ),
+                  TextFormField(
+                    controller: email,
+                    onChanged: (value) {
+                      _formkey.currentState!.validate();
+                    },
+                    validator: (String? value) {
+                      if (value!.isEmpty) {
+                        return 'Please a Enter';
+                      } else if (!RegExp(
+                          r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+(.)+[a-zA-Z0-9-]*$')
+                          .hasMatch(value)) {
+                        return 'Please a valid Email';
+                      }
+                    },
+                    onSaved: (String? value) {
+                      email = value as TextEditingController;
+                    },
+                    cursorColor: kPrimaryColor,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.person,
+                        color: kPrimaryColor,
                       ),
-                    ],
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(0, 35, 0, 6),
-                  child: Text("Welcome back !",
-                      style: TextStyle(fontSize: 22, color: Color(0xff333333))),
-                ),
-                const SizedBox(height: 20,),
-                TextFormField(
-                  controller: email,
-                  onChanged: ( value)  {
-                    _formkey.currentState!.validate();
-                  },
-                  validator: (String? value) {
-                    if (value!.isEmpty) {
-                      return 'Please a Enter';
-                    } else if (!RegExp(
-                        r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+(.)+[a-zA-Z0-9-]*$')
-                        .hasMatch(value)) {
-                      return 'Please a valid Email';
-                    }
-                  },
-                  onSaved: (String? value) {
-                    email = value as TextEditingController;
-                  },
-                  cursorColor: kPrimaryColor,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.person,
-                      color: kPrimaryColor,
-                    ),
-                    hintText: "Email",
-                    labelText: "Email",
-                    border: OutlineInputBorder(
-                        borderSide:
-                        BorderSide(color: Color(0xffCED0D2), width: 1),
-                        borderRadius: BorderRadius.all(Radius.circular(6))),
-                  ),
-                ),
-                const SizedBox(height: 20,),
-                TextFormField(
-                  controller: password,
-                  obscureText: !_obscureText,
-                  onChanged: (value) {
-                    _formkey.currentState!.validate();
-                  },
-                  validator: (String? value) {
-                    if (value!.isEmpty) {
-                      return 'Please a Enter Password';
-                    } else if (value!.length < 6) {
-                      return 'password is too short ';
-                    }
-                    return null;
-                  },
-                  cursorColor: kPrimaryColor,
-                  decoration:  InputDecoration(
-                    hintText: "Mật khẩu",
-                    labelText: "Mật khẩu",
-                    prefixIcon: const Icon(
-                      Icons.lock,
-                      color: kPrimaryColor,
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon( _obscureText
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: kPrimaryColor,),
-                      onPressed: _passwordVisible
-                    ),
+                      hintText: "Email",
+                      labelText: "Email",
                       border: OutlineInputBorder(
                           borderSide:
-                          BorderSide(color: Color(0xffCED0D2).withOpacity(0.2)),
+                          BorderSide(color: Color(0xffCED0D2), width: 1),
                           borderRadius: BorderRadius.all(Radius.circular(6))),
-                  ),
-                ),
-                Container(
-                  constraints: BoxConstraints.loose(
-                    const Size(double.infinity, 35),
-                  ),
-                  alignment: AlignmentDirectional.centerEnd,
-                  child: const Padding(
-                    padding: EdgeInsets.fromLTRB(0, 14, 0, 0),
-                    child: Text(
-                      "Forgot password?",
-                      style: TextStyle(fontSize: 16),
                     ),
                   ),
-                ),
-                SizedBox(height: size.height*0.075,),
-                SizedBox(
-                  width: size.width * 0.8,
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(6)),
-                    child: ElevatedButton(
-                      child: const Text(
-                        "LOGIN",
-                        style: TextStyle(color: Colors.white),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    controller: password,
+                    obscureText: !_obscureText,
+                    onChanged: (value) {
+                      _formkey.currentState!.validate();
+                    },
+                    validator: (String? value) {
+                      if (value!.isEmpty) {
+                        return 'Please a Enter Password';
+                      } else if (value!.length < 6) {
+                        return 'password is too short ';
+                      }
+                      return null;
+                    },
+                    cursorColor: kPrimaryColor,
+                    decoration: InputDecoration(
+                      hintText: "Mật khẩu",
+                      labelText: "Mật khẩu",
+                      prefixIcon: const Icon(
+                        Icons.lock,
+                        color: kPrimaryColor,
                       ),
-                      onPressed: () {
-                        if (_formkey.currentState!.validate()) {
-                          return loginBloc!.add(LoginButtonPressed(
-                              email: email.text, password: password.text));
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                          primary: kPrimaryColor,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 40, vertical: 20),
-                          textStyle: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500)),
+                      suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscureText
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: kPrimaryColor,
+                          ),
+                          onPressed: _passwordVisible),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color(0xffCED0D2).withOpacity(0.2)),
+                          borderRadius: BorderRadius.all(Radius.circular(6))),
                     ),
                   ),
-                ),
-
-              ],
+                  Container(
+                    constraints: BoxConstraints.loose(
+                      const Size(double.infinity, 35),
+                    ),
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: const Padding(
+                      padding: EdgeInsets.fromLTRB(0, 14, 0, 0),
+                      child: Text(
+                        "Forgot password?",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: size.height * 0.075,
+                  ),
+                  SizedBox(
+                    width: size.width * 0.8,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(6)),
+                      child: ElevatedButton(
+                        child: const Text(
+                          "LOGIN",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () {
+                          if (_formkey.currentState!.validate()) {
+                            return loginBloc!.add(LoginButtonPressed(
+                                email: email.text, password: password.text));
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                            primary: kPrimaryColor,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 40, vertical: 20),
+                            textStyle: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                    ),
+                  ),
+                  msg,
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: size.height * 0.04),
+                    width: size.width * 0.8,
+                    child: Row(
+                      children: const <Widget>[
+                        Expanded(
+                          child: Divider(
+                            color: Color(0xFFD9D9D9),
+                            height: 1.5,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            "OR",
+                            style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            color: Color(0xFFD9D9D9),
+                            height: 1.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 20),
+                            padding: EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white70,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.blueGrey.withOpacity(0.3),
+                                  spreadRadius: 2,
+                                  blurRadius: 2,
+                                  offset: Offset(0, 3), // changes position of shadow
+                                ),
+                              ],
+                              border: Border.all(
+                                width: 2,
+                                color: Colors.blue.withOpacity(0.5),
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                            child: SvgPicture.asset(
+                              "assets/icons/facebook.svg",
+                              height: 21,
+                              width: 21,
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 20),
+                            padding: EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white70,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.blueGrey.withOpacity(0.3),
+                                  spreadRadius: 2,
+                                  blurRadius: 2,
+                                  offset: Offset(0, 3), // changes position of shadow
+                                ),
+                              ],
+                              border: Border.all(
+                                width: 2,
+                                color: Colors.blue.withOpacity(0.5),
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                            child: SvgPicture.asset(
+                              "assets/icons/google-blus.svg",
+                              height: 21,
+                              width: 21,
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 20),
+                            padding: EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white70,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.blueGrey.withOpacity(0.3),
+                                  spreadRadius: 2,
+                                  blurRadius: 2,
+                                  offset: Offset(0, 3), // changes position of shadow
+                                ),
+                              ],
+                              border: Border.all(
+                                width: 2,
+                                color: Colors.blue.withOpacity(0.5),
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                            child: SvgPicture.asset(
+                              "assets/icons/twitter.svg",
+                              height: 21,
+                              width: 21,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -249,4 +402,3 @@ class _BodyLoginState extends State<BodyLogin> {
     );
   }
 }
-

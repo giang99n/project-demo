@@ -1,7 +1,7 @@
 class AppConstants {
   AppConstants._();
   static const String apiKey="";
-  static const String baseUrl="https:huntsub.com/";
+  static const String baseUrl="https://huntsub.com/";
 
   // Dio
   static const int receiveTimeout = 10000;
