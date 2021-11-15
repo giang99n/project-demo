@@ -31,25 +31,23 @@ class Api {
       String name, String email, String password, String job, String phoneNumber) async {
     Response response;
     try {
-      var formData = FormData.fromMap({
-        "name": name,
-        "username": email,
-        "password": password,
-        // "job": job,
-        "phone": phoneNumber,
-        "verify":true,
-        "home" : {
-          "address":"Tam Giang, Yên Phong, Bắc Ninh",
-          "type" : "Point",
-          "coordinates" : [
-            108.215028,
-            16.053509
-          ]
-        },
-        "language": "en"
-    });
       response = await restClient.post('api/user/create',
-          data: formData);
+          data: {
+            "name": name,
+            "username": email,
+            "password": password,
+            "job": job,
+            "phone": phoneNumber,
+            "verify":true,
+            "home" : {
+              "address":"Tam Giang, Yên Phong, Bắc Ninh",
+              "type" : "Point",
+              "coordinates" : [
+                108.215028,
+                16.053509
+              ]
+            },
+            "language": "en"});
       if (response.statusCode == 200) {
         return SignupResponse.fromJson(response.data);
       } else {

@@ -23,7 +23,7 @@ class _MyAppState extends State<MyApp> {
         primaryColor: kPrimaryColor,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: const LoginScreen(),
+      home: const SignUpScreen(),
       // navigatorKey: AppNavigator.navigatorKey,
       // onGenerateRoute: AppNavigator.onGenerateRoute,
     );
