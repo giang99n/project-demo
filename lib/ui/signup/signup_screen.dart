@@ -55,6 +55,11 @@ class _BodySignupState extends State<BodySignup> {
   Api? api;
   void initState() {
     _obscureText = false;
+    name.text = "hieu";
+    email.text = "hieu@gmail.com";
+    password.text ="123456";
+    confirmPassword.text = "123456";
+    phoneNumber.text = "0392755136";
     signupBloc = BlocProvider.of<SignupBloc>(context);
 
   }

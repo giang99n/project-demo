@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:projectbnk/models/login_res.dart';
@@ -13,7 +15,7 @@ class Api {
     Response response;
     try {
       response = await restClient
-          .post('auths/login', data: {'email': email, 'password': password});
+          .post('api/auth/login', data: {'username': email, 'password': password});
       if (response.statusCode == 200) {
         return LoginResponse.fromJson(response.data);
       } else {
