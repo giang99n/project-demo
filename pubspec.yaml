@@ -48,6 +48,7 @@ dependencies:
   intl: ^0.15.7
   flutter_masked_text: ^0.7.0
   json_serializable: ^3.5.1
+  carousel_slider: ^3.0.0
 
 dev_dependencies:
   flutter_test:

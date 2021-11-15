@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectbnk/blocs/login/login_bloc.dart';
@@ -27,13 +28,39 @@ class BodyLogin extends StatefulWidget {
 }
 
 class _BodyLoginState extends State<BodyLogin> {
+  final List<String> imageList = [
+    "https://www.setaswall.com/wp-content/uploads/2018/08/Spiderman-Wallpaper-76-1280x720.jpg",
+    "https://lh3.googleusercontent.com/proxy/yL2FmQfZA79S5eIDza9MH2NjKGIKWPOGRHxHdYwiNPcYDW26YmK6qnP01ZDLsBENZpiADc1ohkj3LzVjrwoX8Pb-crT6MYZb3Jp9gy3ZrlET_yvoFS0qtUHLq4DtVPcqIdxPiNWI_j08omBVACv-YJc",
+    "https://images.hdqwalls.com/download/spiderman-peter-parker-standing-on-a-rooftop-ix-1280x720.jpg",
+    "https://images.wallpapersden.com/image/download/peter-parker-spider-man-homecoming_bGhsa22UmZqaraWkpJRmZ21lrWxnZQ.jpg",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvUgui-suS8DgaljlONNuhy4vPUsC_UKvxJQ&usqp=CAU",
+  ];
+
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  late bool _obscureText ;
 
   LoginBloc? loginBloc;
-
   Api? api;
+
+  @override
+  void initState() {
+    _obscureText = false;
+  }
+  @override
+  void setState(VoidCallback fn) {
+    loginBloc = BlocProvider.of<LoginBloc>(context);
+    email.text = 'dog1@gmail.com';
+    password.text = '123456';
+    super.setState(fn);
+  }
+
+  void _passwordVisible() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +78,26 @@ class _BodyLoginState extends State<BodyLogin> {
                 const SizedBox(
                   height: 80,
                 ),
-                Image.asset(
-                  'meo.jpg',
-                  height: 100,
-                  width: 180,
+                Center(
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      enlargeCenterPage: true,
+                      enableInfiniteScroll: false,
+                      autoPlay: true,
+                    ),
+                    items: imageList.map((e) => ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: <Widget>[
+                          Image.network(e,
+                            width: size.width*0.8,
+                            height: size.height*0.38,
+                            fit: BoxFit.cover,)
+                        ],
+                      ) ,
+                    )).toList(),
+                  ),
                 ),
                 const Padding(
                   padding: EdgeInsets.fromLTRB(0, 35, 0, 6),
@@ -64,7 +107,8 @@ class _BodyLoginState extends State<BodyLogin> {
                 const SizedBox(height: 20,),
                 TextFormField(
                   controller: email,
-                  onChanged: (String? value)  {
+                  onChanged: ( value)  {
+                    _formkey.currentState!.validate();
                   },
                   validator: (String? value) {
                     if (value!.isEmpty) {
@@ -95,8 +139,10 @@ class _BodyLoginState extends State<BodyLogin> {
                 const SizedBox(height: 20,),
                 TextFormField(
                   controller: password,
-                  obscureText: true,
-                  onChanged: (value) {},
+                  obscureText: !_obscureText,
+                  onChanged: (value) {
+                    _formkey.currentState!.validate();
+                  },
                   validator: (String? value) {
                     if (value!.isEmpty) {
                       return 'Please a Enter Password';
@@ -106,20 +152,23 @@ class _BodyLoginState extends State<BodyLogin> {
                     return null;
                   },
                   cursorColor: kPrimaryColor,
-                  decoration: const InputDecoration(
+                  decoration:  InputDecoration(
                     hintText: "Mật khẩu",
                     labelText: "Mật khẩu",
-                    prefixIcon: Icon(
+                    prefixIcon: const Icon(
                       Icons.lock,
                       color: kPrimaryColor,
                     ),
-                    suffixIcon: Icon(
-                      Icons.visibility,
-                      color: kPrimaryColor,
+                    suffixIcon: IconButton(
+                      icon: Icon( _obscureText
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: kPrimaryColor,),
+                      onPressed: _passwordVisible
                     ),
                       border: OutlineInputBorder(
                           borderSide:
-                          BorderSide(color: Color(0xffCED0D2), width: 1),
+                          BorderSide(color: Color(0xffCED0D2).withOpacity(0.2)),
                           borderRadius: BorderRadius.all(Radius.circular(6))),
                   ),
                 ),
