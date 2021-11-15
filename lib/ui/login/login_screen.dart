@@ -28,6 +28,7 @@ class BodyLogin extends StatefulWidget {
 }
 
 class _BodyLoginState extends State<BodyLogin> {
+  int currentPos = 0;
   final List<String> imageList = [
     "https://www.setaswall.com/wp-content/uploads/2018/08/Spiderman-Wallpaper-76-1280x720.jpg",
     "https://lh3.googleusercontent.com/proxy/yL2FmQfZA79S5eIDza9MH2NjKGIKWPOGRHxHdYwiNPcYDW26YmK6qnP01ZDLsBENZpiADc1ohkj3LzVjrwoX8Pb-crT6MYZb3Jp9gy3ZrlET_yvoFS0qtUHLq4DtVPcqIdxPiNWI_j08omBVACv-YJc",
@@ -79,24 +80,51 @@ class _BodyLoginState extends State<BodyLogin> {
                   height: 80,
                 ),
                 Center(
-                  child: CarouselSlider(
-                    options: CarouselOptions(
-                      enlargeCenterPage: true,
-                      enableInfiniteScroll: false,
-                      autoPlay: true,
-                    ),
-                    items: imageList.map((e) => ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: <Widget>[
-                          Image.network(e,
-                            width: size.width*0.8,
-                            height: size.height*0.38,
-                            fit: BoxFit.cover,)
-                        ],
-                      ) ,
-                    )).toList(),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CarouselSlider(
+                        options: CarouselOptions(
+                          enlargeCenterPage: true,
+                          enableInfiniteScroll: false,
+                          autoPlay: true,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                currentPos = index;
+                              });
+                            }
+                        ),
+                        items: imageList.map((e) => ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: <Widget>[
+                              Image.network(e,
+                                width: size.width*0.8,
+                                height: size.height*0.38,
+                                fit: BoxFit.cover,)
+                            ],
+                          ) ,
+                        )).toList(),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: imageList.map((url) {
+                          int index = imageList.indexOf(url);
+                          return Container(
+                            width: 8.0,
+                            height: 8.0,
+                            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: currentPos == index
+                                  ? Color.fromRGBO(0, 0, 0, 0.9)
+                                  : Color.fromRGBO(0, 0, 0, 0.4),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
                   ),
                 ),
                 const Padding(
