@@ -20,19 +20,22 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
     } else if (event is LoginButtonPressed) {
       yield LoginLoadingState();
       var data = await apiRepository.login(event.email, event.password);
+      print(data.toString());
       if (data != null) {
         if (data!.status == "success") {
           pref.setString('token', data!.data!.session!.id.toString() ?? "");
           print(data!.data!.session!.id.toString());
           pref.setString('userId', data!.data!.session!.userId.toString() ?? "");
           yield LoginSuccessState();
-        } else if (data.status == "error") {
+        } else if (data!.status == "error") {
+          print("login error");
           yield LoginErrorState(
               message: data.error ??
-                  "đăng nhập thất bại"); /////////////////////////
+                  "đăng nhập thất bại");
         }
       } else {
-        print('data null');
+        yield LoginErrorState(
+            message: "đăng nhập thất bại");
       }
     }
   }
