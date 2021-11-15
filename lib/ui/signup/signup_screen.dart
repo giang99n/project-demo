@@ -5,6 +5,8 @@ import 'package:projectbnk/blocs/signup/signup_bloc.dart';
 import 'package:projectbnk/network/apis.dart';
 
 class SignUpScreen extends StatelessWidget {
+  const SignUpScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(

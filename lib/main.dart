@@ -1,9 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:projectbnk/ui/login/login_screen.dart';
-
 import 'configs/colors.dart';
-import 'ui/Screens/Welcome/welcome_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,7 +22,7 @@ class _MyAppState extends State<MyApp> {
         primaryColor: kPrimaryColor,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: LoginScreen(),
+      home: const LoginScreen(),
       // navigatorKey: AppNavigator.navigatorKey,
       // onGenerateRoute: AppNavigator.onGenerateRoute,
     );
