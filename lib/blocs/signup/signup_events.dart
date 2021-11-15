@@ -10,8 +10,8 @@ class StartEvent extends SignupEvents {}
 class SignupButtonPressed extends SignupEvents {
   final String email;
   final String password;
-  final String name;
-
+  final String name ,phoneNumber;
+  final String job;
   SignupButtonPressed(
-      {required this.email, required this.password, required this.name});
+      {required this.email, required this.password, required this.name, required this.job, required this.phoneNumber});
 }

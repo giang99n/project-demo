@@ -15,19 +15,18 @@ class SignupBloc extends Bloc<SignupEvents, SignupState> {
 
   @override
   Stream<SignupState> mapEventToState(SignupEvents event) async* {
-    final pref = await SharedPreferences.getInstance();
     if (event is StartEvent) {
       yield SignupInitState();
     } else if (event is SignupButtonPressed) {
       yield SignupLoadingState();
       var data =
-          await apiRepository.Signup(event.name, event.email, event.password);
+          await apiRepository.Signup(event.name, event.email, event.password, event.job, event.phoneNumber );
       if (data != null) {
-        if (data!.status == 1) {
+        if (data!.error.toString() == "Internal Server Error") {
           yield SignupSuccessState();
-        } else if (data.status == 0) {
-          print("user exists");
-          yield SignupErrorState(message: data!.message.toString() ?? "");
+        } else if (data.error.toString() == "") {
+          print("Username was exist");
+          yield SignupErrorState(message: data!.error.toString() ?? "");
         }
       } else {
         print('data null');
