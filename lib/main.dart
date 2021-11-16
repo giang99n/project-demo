@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:projectbnk/ui/login/login_screen.dart';
+import 'package:projectbnk/ui/signup/signup_screen.dart';
 import 'configs/colors.dart';
 
 void main() => runApp(MyApp());

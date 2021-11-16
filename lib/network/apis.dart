@@ -1,3 +1,5 @@
+
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:projectbnk/models/login_res.dart';
@@ -36,11 +38,26 @@ class Api {
   }
 
   Future<SignupResponse?> Signup(
-      String name, String email, String password) async {
+      String name, String email, String password, String job, String phoneNumber) async {
     Response response;
     try {
-      response = await restClient.post('auths/register',
-          data: {'name': name, 'email': email, 'password': password});
+      response = await restClient.post('api/user/create',
+          data: {
+            "name": name,
+            "username": email,
+            "password": password,
+            "job": job,
+            "phone": phoneNumber,
+            "verify":true,
+            "home" : {
+              "address":"Tam Giang, Yên Phong, Bắc Ninh",
+              "type" : "Point",
+              "coordinates" : [
+                108.215028,
+                16.053509
+              ]
+            },
+            "language": "en"});
       if (response.statusCode == 200) {
         return SignupResponse.fromJson(response.data);
       } else {
