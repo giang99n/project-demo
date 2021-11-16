@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:projectbnk/models/home_get_post_res.dart';
 import 'package:projectbnk/models/login_res.dart';
 import 'package:projectbnk/models/signup_res.dart';
 import 'package:projectbnk/network/error.dart';
@@ -71,6 +72,27 @@ class Api {
       return SignupResponse.fromJson(e.response.data);
         // ErrorHandle eh =  ErrorHandle(dioErrorType: e.type, baseResponse: sr );
       // eh.defaultError();
+    }
+    return null;
+  }
+
+  Future<HomeGetPostResponse?> getListPost(String token) async {
+    Dio dio = Dio();
+    dio.options.headers["Authorization"] = "Bearer $token";
+    dio.interceptors.add(PrettyDioLogger());
+    Response response;
+    try {
+      response = await dio.get(
+        'https://huntsub.com/api/post/getall',//https://huntsub.com/api/post/getall?skip=1&limit=2&type=&lat=20.9773945&lng=105.7839877&keyword=&
+          queryParameters: {'skip': 1,'type':'','lat':20.9773945,'lng':105.7839877,'keyword':'','limit':4,}
+      );
+      if (response.statusCode == 200) {
+        return HomeGetPostResponse.fromJson(response.data);
+      } else {
+        print('There is some problem status code not 200');
+      }
+    } on Exception catch (e) {
+      print(e);
     }
     return null;
   }
