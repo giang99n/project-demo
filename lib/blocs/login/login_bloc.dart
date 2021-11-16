@@ -23,8 +23,8 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
       print(data.toString());
       if (data != null) {
         if (data!.status == "success") {
+          await pref.remove('errorLogin');
           pref.setString('token', data!.data!.session!.id.toString() ?? "");
-          print(data!.data!.session!.id.toString());
           pref.setString('userId', data!.data!.session!.userId.toString() ?? "");
           yield LoginSuccessState();
         } else if (data!.status == "error") {
@@ -35,7 +35,7 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
         }
       } else {
         yield LoginErrorState(
-            message: "đăng nhập thất bại");
+            message:pref.getString('errorLogin') ?? "đăng nhập thất bại");
       }
     }
   }

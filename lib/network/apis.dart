@@ -13,7 +13,6 @@ class Api {
 
   Future<LoginResponse?> login(String email, String password) async {
     Response response;
-    DioError dioError;
     try {
       response = await restClient.post('api/auth/login',
           data: {'username': email, 'password': password});
@@ -28,8 +27,11 @@ class Api {
     } on DioError catch (e) {
       if (e.response != null) {
         print(e.response.data.toString());
-        final pref = await SharedPreferences.getInstance();
-        pref.setString('errorLogin', ""?? "");
+        if(e.response.statusCode==401){
+          final pref = await SharedPreferences.getInstance();
+          pref.setString('errorLogin', LoginErrorResponse.fromJson(e.response.data).error.toString()?? "");
+        }
+
       } else {
         print(e.message);
       }

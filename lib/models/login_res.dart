@@ -244,3 +244,21 @@ class Statusactive {
     "device": device,
   };
 }
+class LoginErrorResponse {
+  String? error;
+  String? status;
+
+  LoginErrorResponse({this.error, this.status});
+
+  LoginErrorResponse.fromJson(Map<String, dynamic> json) {
+    error = json['error'];
+    status = json['status'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['error'] = this.error;
+    data['status'] = this.status;
+    return data;
+  }
+}
