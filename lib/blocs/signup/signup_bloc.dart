@@ -23,13 +23,14 @@ class SignupBloc extends Bloc<SignupEvents, SignupState> {
           await apiRepository.Signup(event.name, event.email, event.password, event.job, event.phoneNumber );
       if (data != null) {
         if (data!.error.toString() == "Internal Server Error") {
+          print("dkioke");
           yield SignupSuccessState();
-        } else if (data.error.toString() == "") {
+        } else if (data.error.toString() == "Username was exist") {
           print("Username was exist");
           yield SignupErrorState(message: data!.error.toString() ?? "");
         }
       } else {
-        print('data null');
+        print('data null ');
       }
     }
   }

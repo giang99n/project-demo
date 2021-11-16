@@ -6,6 +6,7 @@ import 'package:projectbnk/blocs/login/login_bloc.dart';
 import 'package:projectbnk/configs/colors.dart';
 import 'package:projectbnk/network/apis.dart';
 import 'package:projectbnk/ui/home/home_screen.dart';
+import 'package:projectbnk/ui/signup/signup_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -224,21 +225,42 @@ class _BodyLoginState extends State<BodyLogin> {
                           onPressed: _passwordVisible),
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
-                              color: Color(0xffCED0D2).withOpacity(0.2)),
-                          borderRadius: BorderRadius.all(Radius.circular(6))),
+                              color: const Color(0xffCED0D2).withOpacity(0.2)),
+                          borderRadius: const BorderRadius.all(Radius.circular(6))),
                     ),
                   ),
                   Container(
                     constraints: BoxConstraints.loose(
-                      const Size(double.infinity, 35),
+                      const Size(double.infinity, 50),
                     ),
                     alignment: AlignmentDirectional.centerEnd,
-                    child: const Padding(
-                      padding: EdgeInsets.fromLTRB(0, 14, 0, 0),
-                      child: Text(
-                        "Forgot password?",
-                        style: TextStyle(fontSize: 16),
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children:  [
+                        TextButton(
+                          onPressed: (){
+                          },
+                          child: const Text(
+                          "Forgot password?",
+                          style: TextStyle(fontSize: 16, color: Colors.black45),
+                        ),),
+                        TextButton(
+                          onPressed: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return const SignUpScreen();
+                                },
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            "SignUp",
+                            style: TextStyle(fontSize: 16, color: Colors.black45, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(
@@ -250,7 +272,7 @@ class _BodyLoginState extends State<BodyLogin> {
                       borderRadius: const BorderRadius.all(Radius.circular(6)),
                       child: ElevatedButton(
                         child: const Text(
-                          "LOGIN",
+                          "SignIn",
                           style: TextStyle(color: Colors.white),
                         ),
                         onPressed: () {

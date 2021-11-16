@@ -7,6 +7,7 @@ import 'package:projectbnk/blocs/signup/signup_bloc.dart';
 import 'package:projectbnk/blocs/signup/signup_bloc.dart';
 import 'package:projectbnk/configs/colors.dart';
 import 'package:projectbnk/network/apis.dart';
+import 'package:projectbnk/ui/login/login_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -329,18 +330,37 @@ class _BodySignupState extends State<BodySignup> {
 
                 Container(
                   constraints: BoxConstraints.loose(
-                    const Size(double.infinity, 35),
+                    const Size(double.infinity, 50),
                   ),
                   alignment: AlignmentDirectional.centerEnd,
-                  child: const Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Text(
-                      "Forgot password?",
-                      style: TextStyle(fontSize: 16),
-                    ),
+                  child:
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const Text(
+                        "Already have an Account ? ",
+                        style: TextStyle(color: Colors.black45),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => LoginScreen()),
+                          );
+                        },
+                        child: const Text(
+                          "Sign In",
+                          style: TextStyle(
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
-                SizedBox(height: size.height*0.03,),
+                msg,
+                SizedBox(height: size.height*0.03),
                 SizedBox(
                   width: size.width * 0.8,
                   child: ClipRRect(
@@ -368,7 +388,7 @@ class _BodySignupState extends State<BodySignup> {
                     ),
                   ),
                 ),
-
+                SizedBox(height: size.height*0.03),
               ],
             ),
           ),

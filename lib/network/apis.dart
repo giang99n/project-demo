@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:projectbnk/models/login_res.dart';
 import 'package:projectbnk/models/signup_res.dart';
+import 'package:projectbnk/network/error.dart';
 
 import 'dio_client.dart';
 
@@ -53,8 +54,11 @@ class Api {
       } else {
         print('There is some problem status code not 200');
       }
-    } on Exception catch (e) {
-      print(e);
+    } on DioError catch (e) {
+      // BaseResponse br = BaseResponse.fromJson(e.response.data);
+      return SignupResponse.fromJson(e.response.data);
+        // ErrorHandle eh =  ErrorHandle(dioErrorType: e.type, baseResponse: sr );
+      // eh.defaultError();
     }
     return null;
   }
