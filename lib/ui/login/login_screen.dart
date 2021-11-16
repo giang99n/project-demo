@@ -54,11 +54,6 @@ class _BodyLoginState extends State<BodyLogin> {
     _obscureText = false;
   }
 
-  @override
-  void setState(VoidCallback fn) {
-    super.setState(fn);
-  }
-
   void _passwordVisible() {
     setState(() {
       _obscureText = !_obscureText;
@@ -72,7 +67,7 @@ class _BodyLoginState extends State<BodyLogin> {
       if (state is LoginLoadingState) {
         return const CircularProgressIndicator();
       } else if (state is LoginErrorState) {
-        return Text(state.message);
+        return Text(state.message, style: TextStyle(color: Colors.red),);
       } else {
         return Container();
       }
@@ -292,7 +287,10 @@ class _BodyLoginState extends State<BodyLogin> {
                       ),
                     ),
                   ),
-                  msg,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                    child: msg,
+                  ),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: size.height * 0.04),
                     width: size.width * 0.8,
@@ -378,7 +376,7 @@ class _BodyLoginState extends State<BodyLogin> {
                               shape: BoxShape.circle,
                             ),
                             child: SvgPicture.asset(
-                              "assets/icons/google-blus.svg",
+                              "assets/icons/google-plus.svg",
                               height: 21,
                               width: 21,
                             ),
