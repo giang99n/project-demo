@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:projectbnk/blocs/get_post/get_post_bloc.dart';
 import 'package:projectbnk/models/home_get_post_res.dart';
+import 'package:projectbnk/ui/home/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -28,7 +30,7 @@ class HomeScreen extends StatelessWidget {
             elevation: 0,
             title: Container(
               child: Text(
-                'HuntSub',
+                'Bnk Solution',
                 style: Theme.of(context).textTheme.caption!.copyWith(
                       color: Colors.blue,
                       fontSize: 24,
@@ -37,20 +39,23 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             actions: [
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                padding: const EdgeInsets.all(6.5),
-                decoration: BoxDecoration(
-                  color: Colors.black12,
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.blue.withOpacity(0.5),
+              GestureDetector(
+                onTap: (){},
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.all(6.5),
+                  decoration: BoxDecoration(
+                    color: Colors.black12,
+                    border: Border.all(
+                      width: 1,
+                      color: Colors.blue.withOpacity(0.5),
+                    ),
+                    shape: BoxShape.circle,
                   ),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.search_outlined,
-                  color: Colors.black,
+                  child: const Icon(
+                    Icons.search_outlined,
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ],
@@ -122,7 +127,7 @@ class _BuildHomeScreenState extends State<BuildHomeScreen>
             child: TabBarView(
               children: [
                 _home(context),
-                _profile(context),
+                ProFileScreen(),
                 _notify(context),
                 _rank(context)
               ],
@@ -137,7 +142,8 @@ class _BuildHomeScreenState extends State<BuildHomeScreen>
   Widget _home(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     HomeGetPostResponse homeGetPostResponse;
-    return Container(
+    return
+      Container(
       margin: const EdgeInsets.only(top: 10),
       child: BlocBuilder<GetPostBloc, GetPostState>(builder: (context, state) {
         if (state is GetPostLoadingState) {
@@ -221,7 +227,7 @@ class _BuildHomeScreenState extends State<BuildHomeScreen>
                             margin: EdgeInsets.fromLTRB(6,6,6,6),
                             width: size.width * 0.8,
                             child: Row(
-                              children: const <Widget>[
+                              children: const [
                                 Expanded(
                                   child: Divider(
                                     color: Color(0xFFD9D9D9),
@@ -276,7 +282,7 @@ class _BuildHomeScreenState extends State<BuildHomeScreen>
                                       ),
                                       subtitle: Text(
                                         listPostResponse![index].rankname.toString() +
-                                            ' | ' +
+                                            ' - ' +
                                             listPostResponse![index].job.toString(),
                                         overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
@@ -459,7 +465,7 @@ class _BuildHomeScreenState extends State<BuildHomeScreen>
                               ),
                               subtitle: Text(
                                 listPostResponse![index].rankname.toString() +
-                                    ' | ' +
+                                    ' - ' +
                                     listPostResponse![index].job.toString(),
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
@@ -624,6 +630,7 @@ class _BuildHomeScreenState extends State<BuildHomeScreen>
       }),
     );
   }
+
 
   Widget _profile(BuildContext context) {
     Size size = MediaQuery.of(context).size;

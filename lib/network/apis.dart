@@ -3,8 +3,11 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:projectbnk/models/home_get_post_res.dart';
+import 'package:projectbnk/models/infor_res.dart';
 import 'package:projectbnk/models/login_res.dart';
+import 'package:projectbnk/models/post_res.dart';
 import 'package:projectbnk/models/signup_res.dart';
+import 'package:projectbnk/models/user_res.dart';
 import 'package:projectbnk/network/error.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,6 +40,26 @@ class Api {
       } else {
         print(e.message);
       }
+    }
+    return null;
+  }
+
+  Future<UserResponse?> getUser(String token, String userId) async {
+    Dio dio = Dio();
+    dio.options.headers["Authorization"] = "Bearer $token";
+    dio.interceptors.add(PrettyDioLogger());
+    Response response;
+    try {
+      print("token $userId");
+      response = await dio.get('https://huntsub.com/api/user/get', queryParameters: {'id':userId});
+      if (response.statusCode == 200) {
+        print("token $userId");
+        return UserResponse.fromJson(response.data);
+      } else {
+        print('There is some problem status code not 200');
+      }
+    } on Exception catch (e) {
+      print(e);
     }
     return null;
   }
@@ -75,6 +98,24 @@ class Api {
     }
     return null;
   }
+  Future<InforResponse?> getInFor(String token, String userId) async {
+    Dio dio = Dio();
+    dio.options.headers["Authorization"] = "Bearer $token";
+    dio.interceptors.add(PrettyDioLogger());
+    Response response;
+    try {
+      response = await dio.get(
+          'https://huntsub.com/api/user/info', queryParameters: {'id':userId});
+      if (response.statusCode == 200) {
+        return InforResponse.fromJson(response.data);
+      } else {
+        print('There is some problem status code not 200');
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
+    return null;
+  }
 
   Future<HomeGetPostResponse?> getListPost(String token) async {
     Dio dio = Dio();
@@ -96,4 +137,31 @@ class Api {
     }
     return null;
   }
+
+  Future<PostResponse?> post(String token,  String name,String title,String price,String text,String job,String rankname) async {
+    Dio dio = Dio();
+    dio.options.headers["Authorization"] = "Bearer $token";
+    dio.interceptors.add(PrettyDioLogger());
+    Response response;
+    try {
+      response = await dio.post('https://huntsub.com/api/post/create',data: {
+        "name": name,
+        "title": title,
+        "price":price,
+        "job": job,
+        "rankname": rankname,
+        "text": text
+
+      });
+      if (response.statusCode == 200) {
+        return PostResponse.fromJson(response.data);
+      } else {
+        print('There is some problem status code not 200');
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
 }
