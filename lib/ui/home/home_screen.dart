@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:projectbnk/blocs/get_post/get_post_bloc.dart';
-import 'package:projectbnk/blocs/login/login_bloc.dart';
 import 'package:projectbnk/models/home_get_post_res.dart';
 import 'package:projectbnk/network/apis.dart';
 import 'package:projectbnk/ui/home/profile_screen.dart';
@@ -79,7 +80,6 @@ class _BuildHomeScreenState extends State<BuildHomeScreen>
     // TODO: implement initState
     _tabController = TabController(length: 4, vsync: this);
     super.initState();
-    getToken();
   }
 
   @override
@@ -150,88 +150,459 @@ class _BuildHomeScreenState extends State<BuildHomeScreen>
           homeGetPostResponse = state.listPost;
           List<Datum>? listPostResponse = homeGetPostResponse.data;
 
-          return Container(
-            alignment: Alignment.center,
-            child: ListView.builder(
-              itemBuilder: (BuildContext buildContext, int index) {
-                String? img = listPostResponse![index].avatar;
-                bool isAvatar = listPostResponse![index].avatar!.isNotEmpty;
-                print(isAvatar.toString() + '22222222222222');
-                return Card(
-                  child: Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ListTile(
-                          leading: isAvatar ? CircleAvatar(backgroundImage: NetworkImage(img!)) : const CircleAvatar(backgroundImage: AssetImage('assets/images/meo.jpg')),
-                          title: Text(
-                            listPostResponse![index].name.toString(),
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontSize: 19, fontWeight: FontWeight.w700, ),
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+
+                Container(
+                  height: size.height * 0.7,
+                  child: ListView.builder(
+                    itemBuilder: (BuildContext buildContext, int index) {
+                      String? img = listPostResponse![index].avatar;
+                      bool isAvatar =
+                          listPostResponse![index].avatar!.isNotEmpty;
+                      return index==0? Column(
+                        children: [
+                          Card(
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(7.5)),
+                              side: BorderSide(color: Color(0xffdbddde), width: 0.5),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(5, 7, 5, 7),
+                              child: Row(
+                                children: [
+                                  const CircleAvatar(
+                                      backgroundImage:
+                                      AssetImage('assets/images/meo.jpg')),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      padding: EdgeInsets.only(left: 5, right: 5),
+                                      height: 45,
+                                      child: TextButton(
+                                        style: TextButton.styleFrom(
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.all(Radius.circular(30)),
+                                            side: BorderSide(
+                                                color: Color(0xffCED0D2), width: 0.6),
+                                          ),
+                                        ),
+                                        onPressed: () {},
+                                        child: const Text(
+                                          "Enter your text her",
+                                          style:
+                                          TextStyle(fontSize: 16, color: Colors.grey),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                        subtitle: Text(
-                          listPostResponse![index].rankname.toString()+ ' | ' + listPostResponse![index].job.toString(),
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.w400,color: Colors.red),
-                        ),
-                        isThreeLine: true,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(15, 0, 15, 5),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Tên sản phẩm: '+listPostResponse![index].title.toString(),
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 17,fontWeight: FontWeight.w400, color: Colors.blue),
-                            ),
-                            Text(
-                              'Giá: '+listPostResponse![index].price.toString(),
-                              style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w500, ),
-                            ),
-                            Text(
-                              'Mô tả : '+listPostResponse![index].text.toString(),
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 16, ),
-                            ),
-                            SizedBox(height: size.height*0.05,
-                            ),
-                            Wrap(
-                              children: [
-                                const Icon(
-                                  Icons.location_on_outlined,
-                                  color: Colors.red,
+                          Container(
+                            margin: EdgeInsets.fromLTRB(6,6,6,6),
+                            width: size.width * 0.8,
+                            child: Row(
+                              children: const <Widget>[
+                                Expanded(
+                                  child: Divider(
+                                    color: Color(0xFFD9D9D9),
+                                    height: 1,
+                                  ),
                                 ),
-                                Text(
-                                  listPostResponse![index].location!.address.toString(),
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle( fontStyle: FontStyle.italic,
-                                    fontSize: 15, ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  child: Text(
+                                    "New feed",
+                                    style: TextStyle(
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Divider(
+                                    color: Color(0xFFD9D9D9),
+                                    height: 1,
+                                  ),
                                 ),
                               ],
                             ),
-
-
-
-
-                          ],
+                          ),
+                          Card(
+                            margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+                            color: Colors.white,
+                            shape: const RoundedRectangleBorder(
+                              side:
+                              BorderSide(color: Color(0xffdbddde), width: 0.4),
+                            ),
+                            child: Container(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ListTile(
+                                      leading: isAvatar
+                                          ? CircleAvatar(
+                                          backgroundImage: NetworkImage(img!))
+                                          : const CircleAvatar(
+                                          backgroundImage:
+                                          AssetImage('assets/images/meo.jpg')),
+                                      title: Text(
+                                        listPostResponse![index].name.toString(),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontSize: 19,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        listPostResponse![index].rankname.toString() +
+                                            ' | ' +
+                                            listPostResponse![index].job.toString(),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.red),
+                                      ),
+                                      isThreeLine: true,
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.fromLTRB(15, 0, 15, 5),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            listPostResponse![index].title.toString(),
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w400,
+                                                color: Colors.blue),
+                                          ),
+                                          Text(
+                                            'Giá: ' +
+                                                listPostResponse![index]
+                                                    .price
+                                                    .toString(),
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Mô tả : ' +
+                                                listPostResponse![index]
+                                                    .text
+                                                    .toString(),
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: size.height * 0.05,
+                                          ),
+                                          Wrap(
+                                            children: [
+                                              const Icon(
+                                                Icons.location_pin,
+                                                color: Colors.red,
+                                              ),
+                                              Text(
+                                                listPostResponse![index]
+                                                    .location!
+                                                    .address
+                                                    .toString(),
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  fontStyle: FontStyle.italic,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const Padding(
+                                            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                            child: Divider(
+                                              color: Colors.black,
+                                              height: 2,
+                                            ),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {},
+                                                    radius: 15,
+                                                    child: Row(
+                                                      children: [
+                                                        SvgPicture.asset(
+                                                          "assets/icons/unlike.svg",
+                                                          height: 21,
+                                                          width: 21,
+                                                          color: Colors.red,
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 1,
+                                                        ),
+                                                        Text(
+                                                          listPostResponse![index]
+                                                              .like
+                                                              .toString(),
+                                                          style: const TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight: FontWeight.w400,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () {},
+                                                    radius: 15,
+                                                    child: Row(
+                                                      children: [
+                                                        const Icon(
+                                                          Icons
+                                                              .messenger_outline_rounded,
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 1,
+                                                        ),
+                                                        Text(
+                                                          listPostResponse![index]
+                                                              .comment
+                                                              .toString(),
+                                                          style: const TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight: FontWeight.w400,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Text(
+                                                readTimestamp(listPostResponse![index]
+                                                    .mtime!
+                                                    .toInt()),
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  fontStyle: FontStyle.italic,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                )),
+                          )
+                        ],
+                      ) :
+                        Card(
+                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+                        color: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                          side:
+                              BorderSide(color: Color(0xffdbddde), width: 0.4),
                         ),
-                      )
-
-
-                    ],
-                  )),
-                );
-              },
-              itemCount: listPostResponse!.length,
+                        child: Container(
+                            child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ListTile(
+                              leading: isAvatar
+                                  ? CircleAvatar(
+                                      backgroundImage: NetworkImage(img!))
+                                  : const CircleAvatar(
+                                      backgroundImage:
+                                          AssetImage('assets/images/meo.jpg')),
+                              title: Text(
+                                listPostResponse![index].name.toString(),
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              subtitle: Text(
+                                listPostResponse![index].rankname.toString() +
+                                    ' | ' +
+                                    listPostResponse![index].job.toString(),
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.red),
+                              ),
+                              isThreeLine: true,
+                            ),
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(15, 0, 15, 5),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    listPostResponse![index].title.toString(),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.blue),
+                                  ),
+                                  Text(
+                                    'Giá: ' +
+                                        listPostResponse![index]
+                                            .price
+                                            .toString(),
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Mô tả : ' +
+                                        listPostResponse![index]
+                                            .text
+                                            .toString(),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: size.height * 0.05,
+                                  ),
+                                  Wrap(
+                                    children: [
+                                      const Icon(
+                                        Icons.location_pin,
+                                        color: Colors.red,
+                                      ),
+                                      Text(
+                                        listPostResponse![index]
+                                            .location!
+                                            .address
+                                            .toString(),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontStyle: FontStyle.italic,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                    child: Divider(
+                                      color: Colors.black,
+                                      height: 2,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {},
+                                            radius: 15,
+                                            child: Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                  "assets/icons/unlike.svg",
+                                                  height: 21,
+                                                  width: 21,
+                                                  color: Colors.red,
+                                                ),
+                                                const SizedBox(
+                                                  width: 1,
+                                                ),
+                                                Text(
+                                                  listPostResponse![index]
+                                                      .like
+                                                      .toString(),
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 20,
+                                          ),
+                                          InkWell(
+                                            onTap: () {},
+                                            radius: 15,
+                                            child: Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons
+                                                      .messenger_outline_rounded,
+                                                ),
+                                                const SizedBox(
+                                                  width: 1,
+                                                ),
+                                                Text(
+                                                  listPostResponse![index]
+                                                      .comment
+                                                      .toString(),
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(
+                                        readTimestamp(listPostResponse![index]
+                                            .mtime!
+                                            .toInt()),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontStyle: FontStyle.italic,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        )),
+                      );
+                    },
+                    itemCount: listPostResponse!.length,
+                  ),
+                ),
+              ],
             ),
           );
         } else {
@@ -254,10 +625,31 @@ class _BuildHomeScreenState extends State<BuildHomeScreen>
         margin: const EdgeInsets.only(top: 10), child: Text('rank'));
   }
 
-  void getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _token = (prefs.getString('token') ?? "");
-    });
+  String readTimestamp(int timestamp) {
+    var now = DateTime.now();
+    var format = DateFormat('HH:mm a');
+    var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+    var diff = now.difference(date);
+    var time = '';
+    if (diff.inSeconds <= 0 ||
+        diff.inSeconds > 0 && diff.inMinutes == 0 ||
+        diff.inMinutes > 0 && diff.inHours == 0 ||
+        diff.inHours > 0 && diff.inDays == 0) {
+      time = format.format(date);
+    } else if (diff.inDays > 0 && diff.inDays < 7) {
+      if (diff.inDays == 1) {
+        time = diff.inDays.toString() + ' day ago';
+      } else {
+        time = diff.inDays.toString() + ' days ago';
+      }
+    } else {
+      if (diff.inDays == 7) {
+        time = (diff.inDays / 7).floor().toString() + ' week ago';
+      } else {
+        time = (diff.inDays / 7).floor().toString() + ' wekks ago';
+      }
+    }
+
+    return time;
   }
 }

@@ -49,7 +49,7 @@ class _BodyLoginState extends State<BodyLogin> {
   @override
   void initState() {
     loginBloc = BlocProvider.of<LoginBloc>(context);
-    email.text = 'dog1@gmail.com';
+    email.text = 'dog2@gmail.com';
     password.text = '123456';
     _obscureText = false;
   }
