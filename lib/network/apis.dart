@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:projectbnk/models/home_get_post_res.dart';
 import 'package:projectbnk/models/infor_res.dart';
+import 'package:projectbnk/models/like_post_res.dart';
 import 'package:projectbnk/models/login_res.dart';
 import 'package:projectbnk/models/signup_res.dart';
 import 'package:projectbnk/models/user_res.dart';
@@ -39,6 +40,25 @@ class Api {
       } else {
         print(e.message);
       }
+    }
+    return null;
+  }
+
+  Future<LikePostResponse?> LikePost(String token, String postId) async {
+    Dio dio = Dio();
+    dio.options.headers["Authorization"] = "Bearer $token";
+    dio.interceptors.add(PrettyDioLogger());
+    Response response;
+    try {
+      response = await restClient.post('https://huntsub.com/api/like/create',
+          data: {'postid': postId});
+      if (response.statusCode == 200) {
+        return LikePostResponse.fromJson(response.data);
+      }  else {
+        print('There is some problem status code not 200');
+      }
+    } on DioError catch (e) {
+        print(e);
     }
     return null;
   }

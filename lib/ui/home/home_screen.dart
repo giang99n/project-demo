@@ -343,7 +343,8 @@ class _BuildHomeScreenState extends State<BuildHomeScreen>
                                               Row(
                                                 children: [
                                                   InkWell(
-                                                    onTap: () {},
+                                                    onTap: () {
+                                                    },
                                                     radius: 15,
                                                     child: Row(
                                                       children: [
