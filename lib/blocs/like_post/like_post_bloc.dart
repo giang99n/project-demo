@@ -21,20 +21,19 @@ class LikePostBloc extends Bloc<LikePostEvents, LikePostState> {
       yield LikePostInitState();
     } else if (event is LikePostButtonPressed) {
       yield LikePostLoadingState();
-      var data = await apiRepository.LikePost(event.token, event.postId);
+      var data = await apiRepository.LikePost(token, event.postId);
       print(data.toString());
       if (data != null) {
         if (data!.status == "success") {
-          await pref.remove('errorLikePost');
           yield LikePostSuccessState();
         } else if (data!.status == "error") {
           print("LikePost error");
           yield LikePostErrorState(
-              message: "đăng nhập thất bại");
+              message: "LikePost error");
         }
       } else {
         yield LikePostErrorState(
-            message:pref.getString('errorLikePost') ?? "đăng nhập thất bại");
+            message: "LikePost error");
       }
     }
   }

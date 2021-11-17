@@ -8,8 +8,7 @@ abstract class LikePostEvents extends Equatable {
 class StartEvent extends LikePostEvents {}
 
 class LikePostButtonPressed extends LikePostEvents {
-  final String token;
   final String postId;
 
-  LikePostButtonPressed({required this.token, required this.postId});
+  LikePostButtonPressed({ required this.postId});
 }

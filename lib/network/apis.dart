@@ -51,15 +51,17 @@ class Api {
     dio.interceptors.add(PrettyDioLogger());
     Response response;
     try {
-      response = await restClient.post('https://huntsub.com/api/like/create',
+      print(token);
+      response = await dio.post('https://huntsub.com/api/like/create',
           data: {'postid': postId});
+
       if (response.statusCode == 200) {
         return LikePostResponse.fromJson(response.data);
       }  else {
         print('There is some problem status code not 200');
       }
     } on DioError catch (e) {
-        print(e);
+      print(e.message);
     }
     return null;
   }

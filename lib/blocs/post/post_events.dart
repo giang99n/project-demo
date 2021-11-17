@@ -8,7 +8,6 @@ abstract class PostEvents extends Equatable {
 class StartEvent extends PostEvents {}
 
 class PostButtonPressed extends PostEvents {
-  final String token;
   final String name;
   final String title;
   final String price;
@@ -17,8 +16,7 @@ class PostButtonPressed extends PostEvents {
   final String rankname;
 
   PostButtonPressed(
-      {required this.token,
-        required this.price,
+      {required this.price,
       required this.text,
       required this.job,
       required this.rankname,
