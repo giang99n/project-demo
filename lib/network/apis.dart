@@ -84,7 +84,7 @@ class Api {
     try {
       response = await dio.get(
         'https://huntsub.com/api/post/getall',//https://huntsub.com/api/post/getall?skip=1&limit=2&type=&lat=20.9773945&lng=105.7839877&keyword=&
-          queryParameters: {'skip': 1,'type':'','lat':20.9773945,'lng':105.7839877,'keyword':'','limit':4,}
+          queryParameters: {'skip': 1,'type':'','lat':20.9773945,'lng':105.7839877,'keyword':'','limit':10,}
       );
       if (response.statusCode == 200) {
         return HomeGetPostResponse.fromJson(response.data);
