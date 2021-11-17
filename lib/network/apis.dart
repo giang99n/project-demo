@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:projectbnk/models/home_get_post_res.dart';
+import 'package:projectbnk/models/infor_res.dart';
 import 'package:projectbnk/models/login_res.dart';
 import 'package:projectbnk/models/signup_res.dart';
+import 'package:projectbnk/models/user_res.dart';
 import 'package:projectbnk/network/error.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -41,6 +43,26 @@ class Api {
     return null;
   }
 
+  Future<UserResponse?> getUser(String token, String userId) async {
+    Dio dio = Dio();
+    dio.options.headers["Authorization"] = "Bearer $token";
+    dio.interceptors.add(PrettyDioLogger());
+    Response response;
+    try {
+      print("token $userId");
+      response = await dio.get('https://huntsub.com/api/user/get', queryParameters: {'id':userId});
+      if (response.statusCode == 200) {
+        print("token $userId");
+        return UserResponse.fromJson(response.data);
+      } else {
+        print('There is some problem status code not 200');
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
   Future<SignupResponse?> Signup(
       String name, String email, String password, String job, String phoneNumber) async {
     Response response;
@@ -72,6 +94,24 @@ class Api {
       return SignupResponse.fromJson(e.response.data);
         // ErrorHandle eh =  ErrorHandle(dioErrorType: e.type, baseResponse: sr );
       // eh.defaultError();
+    }
+    return null;
+  }
+  Future<InforResponse?> getInFor(String token, String userId) async {
+    Dio dio = Dio();
+    dio.options.headers["Authorization"] = "Bearer $token";
+    dio.interceptors.add(PrettyDioLogger());
+    Response response;
+    try {
+      response = await dio.get(
+          'https://huntsub.com/api/user/info', queryParameters: {'id':userId});
+      if (response.statusCode == 200) {
+        return InforResponse.fromJson(response.data);
+      } else {
+        print('There is some problem status code not 200');
+      }
+    } on Exception catch (e) {
+      print(e);
     }
     return null;
   }

@@ -5,6 +5,7 @@ import 'package:projectbnk/blocs/get_post/get_post_bloc.dart';
 import 'package:projectbnk/blocs/login/login_bloc.dart';
 import 'package:projectbnk/models/home_get_post_res.dart';
 import 'package:projectbnk/network/apis.dart';
+import 'package:projectbnk/ui/home/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -121,7 +122,7 @@ class _BuildHomeScreenState extends State<BuildHomeScreen>
             child: TabBarView(
               children: [
                 _home(context),
-                _profile(context),
+                ProFileScreen(),
                 _notify(context),
                 _rank(context)
               ],
@@ -136,7 +137,8 @@ class _BuildHomeScreenState extends State<BuildHomeScreen>
   Widget _home(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     HomeGetPostResponse homeGetPostResponse;
-    return Container(
+    return
+      Container(
       margin: const EdgeInsets.only(top: 10),
       child: BlocBuilder<GetPostBloc, GetPostState>(builder: (context, state) {
         if (state is GetPostLoadingState) {
@@ -239,12 +241,6 @@ class _BuildHomeScreenState extends State<BuildHomeScreen>
     );
   }
 
-  Widget _profile(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Container(
-        margin: const EdgeInsets.only(top: 10),
-        child: Text(_token + 'profile'));
-  }
 
   Widget _notify(BuildContext context) {
     Size size = MediaQuery.of(context).size;
