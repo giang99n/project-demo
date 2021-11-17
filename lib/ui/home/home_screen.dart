@@ -69,7 +69,8 @@ class BuildHomeScreen extends StatefulWidget {
 
 class _BuildHomeScreenState extends State<BuildHomeScreen>
     with SingleTickerProviderStateMixin {
-  String _token = '';
+  String avatar = '';
+
 
   TabController? _tabController;
 
@@ -78,6 +79,7 @@ class _BuildHomeScreenState extends State<BuildHomeScreen>
     // TODO: implement initState
     _tabController = TabController(length: 4, vsync: this);
     super.initState();
+    getAvatar();
   }
 
   @override
@@ -169,9 +171,23 @@ class _BuildHomeScreenState extends State<BuildHomeScreen>
                               padding: const EdgeInsets.fromLTRB(5, 7, 5, 7),
                               child: Row(
                                 children: [
-                                  const CircleAvatar(
-                                      backgroundImage:
-                                      AssetImage('assets/images/meo.jpg')),
+                                  Container(
+                                    padding: const EdgeInsets.all(6.5),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black12,
+                                      border: Border.all(
+                                        width: 1,
+                                        color: Colors.grey.withOpacity(0.5),
+                                      ),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: SvgPicture.asset(
+                                      "assets/icons/avatar.svg",
+                                      height: 22,
+                                      width: 22,
+                                      color: Colors.black54,
+                                    ),
+                                  ),
                                   const SizedBox(
                                     width: 5,
                                   ),
@@ -613,7 +629,7 @@ class _BuildHomeScreenState extends State<BuildHomeScreen>
     Size size = MediaQuery.of(context).size;
     return Container(
         margin: const EdgeInsets.only(top: 10),
-        child: Text(_token + 'profile'));
+        child: Text('profile'));
   }
 
   Widget _notify(BuildContext context) {
@@ -652,7 +668,12 @@ class _BuildHomeScreenState extends State<BuildHomeScreen>
         time = (diff.inDays / 7).floor().toString() + ' wekks ago';
       }
     }
-
     return time;
+  }
+  void getAvatar() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      avatar = (prefs.getString('avatar') ?? "");
+    });
   }
 }
