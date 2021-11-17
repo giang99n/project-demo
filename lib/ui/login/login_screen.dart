@@ -7,7 +7,6 @@ import 'package:projectbnk/configs/colors.dart';
 import 'package:projectbnk/network/apis.dart';
 import 'package:projectbnk/ui/home/home_screen.dart';
 import 'package:projectbnk/ui/signup/signup_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);

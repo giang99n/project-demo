@@ -26,6 +26,7 @@ class LoginBloc extends Bloc<LoginEvents, LoginState> {
           await pref.remove('errorLogin');
           pref.setString('token', data!.data!.session!.id.toString() ?? "");
           pref.setString('userId', data!.data!.session!.userId.toString() ?? "");
+          pref.setString('avatar', data!.data!.user!.avatar.toString()??'');
           yield LoginSuccessState();
         } else if (data!.status == "error") {
           print("login error");

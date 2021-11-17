@@ -92,7 +92,6 @@ class _BodyState extends State<Body> {
                 ],
               ),
               SizedBox(
-                height: size.height * 0.035,
                 width: double.infinity,
                 child: BlocBuilder<ProFileBloc, ProFileState>(
                     builder: (context, state) {
@@ -124,7 +123,6 @@ class _BodyState extends State<Body> {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: size.height * 0.04,
                       width: double.infinity,
                       child: BlocBuilder<ProFileBloc, ProFileState>(
                           builder: (context, state) {
@@ -165,7 +163,6 @@ class _BodyState extends State<Body> {
                       }),
                     ),
                     SizedBox(
-                      height: size.height * 0.04,
                       width: double.infinity,
                       child: BlocBuilder<ProFileBloc, ProFileState>(
                           builder: (context, state) {
@@ -206,7 +203,6 @@ class _BodyState extends State<Body> {
                           }),
                     ),
                     SizedBox(
-                      height: size.height * 0.21,
                       width: double.infinity,
                       child: BlocBuilder<GetInforBloc, GetInforState>(
                           builder: (context, state) {
@@ -301,7 +297,7 @@ class _BodyState extends State<Body> {
                                         borderRadius: const BorderRadius.all(Radius.circular(6)),
                                         child: ElevatedButton(
                                           child: const Text(
-                                            "Chỉnh sửa thông tin chi tiết",
+                                            "Chỉnh sửa thông tin",
                                             style: TextStyle(color: Colors.white),
                                           ),
                                           onPressed: () {

@@ -6,6 +6,7 @@ import 'package:projectbnk/models/home_get_post_res.dart';
 import 'package:projectbnk/models/infor_res.dart';
 import 'package:projectbnk/models/like_post_res.dart';
 import 'package:projectbnk/models/login_res.dart';
+import 'package:projectbnk/models/post_res.dart';
 import 'package:projectbnk/models/signup_res.dart';
 import 'package:projectbnk/models/user_res.dart';
 import 'package:projectbnk/network/error.dart';
@@ -156,4 +157,31 @@ class Api {
     }
     return null;
   }
+
+  Future<PostResponse?> post(String token,  String name,String title,String price,String text,String job,String rankname) async {
+    Dio dio = Dio();
+    dio.options.headers["Authorization"] = "Bearer $token";
+    dio.interceptors.add(PrettyDioLogger());
+    Response response;
+    try {
+      response = await dio.post('https://huntsub.com/api/post/create',data: {
+        "name": name,
+        "title": title,
+        "price":price,
+        "job": job,
+        "rankname": rankname,
+        "text": text
+
+      });
+      if (response.statusCode == 200) {
+        return PostResponse.fromJson(response.data);
+      } else {
+        print('There is some problem status code not 200');
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
 }
